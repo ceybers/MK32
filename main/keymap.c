@@ -157,4 +157,3 @@ uint16_t (*default_layouts[])[MATRIX_ROWS][KEYMAP_COLS] = { &_QWERTY, &_NUM,
 uint8_t current_layout = 0;
 
 #endif
-
