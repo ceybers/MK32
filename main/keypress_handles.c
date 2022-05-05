@@ -85,26 +85,32 @@ uint16_t check_led_status(uint16_t key) {
 void media_control_send(uint16_t keycode) {
 
 	uint8_t media_state[2] = { 0 };
-	if (keycode == KC_MEDIA_NEXT_TRACK) {
-		media_state[1] = 10;
-	}
-	if (keycode == KC_MEDIA_PREV_TRACK) {
-		media_state[1] = 111;
-	}
-	if (keycode == KC_MEDIA_STOP) {
-		media_state[1] = 12;
-	}
-	if (keycode == KC_MEDIA_PLAY_PAUSE) {
-		media_state[1] = 5;
-	}
-	if (keycode == KC_AUDIO_MUTE) {
-		media_state[1] = 1;
-	}
-	if (keycode == KC_AUDIO_VOL_UP) {
-		SET_BIT(media_state[0], 6);
-	}
-	if (keycode == KC_AUDIO_VOL_DOWN) {
-		SET_BIT(media_state[0], 7);
+	
+	switch (keycode) {
+		case KC_AUDIO_MUTE: 
+			media_state[1] = 1; 
+			break;
+		case KC_MEDIA_PLAY_PAUSE: 
+			media_state[1] = 2; 
+			break;
+		case KC_MEDIA_NEXT_TRACK: 
+			media_state[1] = 10; 
+			break;
+		case KC_MEDIA_PREV_TRACK: 
+			media_state[1] = 11; 
+			break;
+		case KC_MEDIA_FAST_FORWARD: 
+			media_state[1] = 8; 
+			break;
+		case KC_MEDIA_REWIND: 
+			media_state[1] = 9; 
+			break;
+		case KC_AUDIO_VOL_UP: 
+			media_state[0] = 64; 
+			break;
+		case KC_AUDIO_VOL_DOWN: 
+			media_state[0] = 128; 
+			break;
 	}
 
 	xQueueSend(media_q, (void*) &media_state, (TickType_t) 0);
@@ -238,7 +244,7 @@ uint8_t *check_key_state(uint16_t **keymap) {
 
 					// checking for media control keycodes
 					if ((keycode >= KC_MEDIA_NEXT_TRACK)
-							&& (keycode <= KC_AUDIO_VOL_DOWN)) {
+							&& (keycode <= KC_MEDIA_REWIND)) {
 						media_control_send(keycode);
 					}
 
@@ -292,7 +298,7 @@ uint8_t *check_key_state(uint16_t **keymap) {
 
 						// checking for media control keycodes
 						if ((keycode >= KC_MEDIA_NEXT_TRACK)
-								&& (keycode <= KC_AUDIO_VOL_DOWN)) {
+								&& (keycode <= KC_MEDIA_REWIND)) {
 							media_control_release(keycode);
 						}
 					}

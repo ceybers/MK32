@@ -144,7 +144,7 @@ static const uint8_t hidReportMap[] = { 0x05, 0x01, // Usage Page (Generic Deskt
 		0x95, 0x02,   //   Report Count (2)
 		0x81, 0x02,   //   Input (Data, Var, Abs)
 		0x09, 0xE2,   //   Usage (Mute)
-		0x09, 0x30,   //   Usage (Power)
+		0x09, 0xCD,   //   Usage (Play/Pause)
 		0x09, 0x83,   //   Usage (Recall Last)
 		0x09, 0x81,   //   Usage (Assign Selection)
 		0x09, 0xB0,   //   Usage (Play)
