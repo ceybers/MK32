@@ -304,6 +304,10 @@ extern "C" void deep_sleep(void *pvParameters) {
 #endif
 
 extern "C" void app_main() {
+	gpio_pad_select_gpio(STATUS_LED);
+	gpio_set_direction(STATUS_LED, GPIO_MODE_OUTPUT);
+	gpio_set_level(STATUS_LED, 0);
+
 	//Reset the rtc GPIOS
 	rtc_matrix_deinit();
 

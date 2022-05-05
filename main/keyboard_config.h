@@ -49,6 +49,8 @@
 #define POTENTIOMETER_PIN GPIO_NUM_17
 #define POTENTIOMETER_KEY 0x0136
 
+#define STATUS_LED GPIO_NUM_15
+
 //OLED Parameters
 //#define OLED_ENABLE //undefine if no oled is used
 #define ROTATION DEG270
