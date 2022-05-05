@@ -50,6 +50,7 @@
 #include "espnow_receive.h"
 #include "espnow_send.h"
 #include "r_encoder.h"
+#include "potentiometer.h"
 #include "battery_monitor.h"
 #include "nvs_funcs.h"
 #include "nvs_keymaps.h"
@@ -217,6 +218,13 @@ extern "C" void slave_encoder_report(void *pvParameters) {
 	}
 }
 
+//Handling potentiometer
+extern "C" void potentiometer_report(void *pvParameters) {
+	while (1) {
+		potentiometer_update();
+	}
+}
+
 //Function for sending out the modified matrix
 extern "C" void slave_scan(void *pvParameters) {
 
@@ -364,6 +372,13 @@ extern "C" void app_main() {
 	xTaskCreatePinnedToCore(encoder_report, "encoder report", 4096, NULL,
 			configMAX_PRIORITIES, NULL, 1);
 	ESP_LOGI("Encoder", "initializezd");
+#endif
+
+#ifdef	POTENTIOMETER
+	potentiometer_setup();
+	xTaskCreatePinnedToCore(potentiometer_report, "potentiometer report", 8192, NULL,
+			configMAX_PRIORITIES, NULL, 1);
+	ESP_LOGI("Potentiometer", "Initialized OK");
 #endif
 
 	// Start the keyboard Tasks
