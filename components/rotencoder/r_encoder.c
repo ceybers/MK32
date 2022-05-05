@@ -131,11 +131,11 @@ void r_encoder_setup(void){
 			.channel = PCNT_CHANNEL_0,
 
 			// What to do on the positive / negative edge of pulse input?
-			.pos_mode = PCNT_COUNT_DIS,   // Count up on the positive edge
+			.pos_mode = PCNT_COUNT_DEC,   
 			.neg_mode = PCNT_COUNT_INC,   // Keep the counter value on the negative edge
 			// What to do when control input is low or high?
-			.lctrl_mode = PCNT_MODE_KEEP, // Reverse counting direction if low
-			.hctrl_mode = PCNT_MODE_REVERSE,    // Keep the primary counter mode if high
+			.lctrl_mode = PCNT_MODE_REVERSE, 
+			.hctrl_mode = PCNT_MODE_KEEP,    
 			// Set the maximum and minimum limit values to watch
 			.counter_h_lim = INT16_MAX,
 			.counter_l_lim = INT16_MIN,
@@ -144,13 +144,20 @@ void r_encoder_setup(void){
 
 	pcnt_unit_config(&pcnt_config_a);
 
+	pcnt_config_a.pulse_gpio_num = ENCODER_B_PIN;
+	pcnt_config_a.ctrl_gpio_num = ENCODER_A_PIN;
+	pcnt_config_a.channel = PCNT_CHANNEL_1;
+	pcnt_config_a.pos_mode = PCNT_COUNT_INC;
+	pcnt_config_a.neg_mode = PCNT_COUNT_DEC;
+	pcnt_unit_config(&pcnt_config_a);
+
 	pcnt_set_filter_value(PCNT_UNIT_0, 1023);  // Filter Runt Pulses
 	pcnt_filter_enable(PCNT_UNIT_0);
 
-	gpio_set_direction(ENCODER_A_PIN,GPIO_MODE_INPUT);
-	gpio_set_pull_mode(ENCODER_A_PIN,GPIO_PULLUP_ONLY);
-	gpio_set_direction(ENCODER_B_PIN,GPIO_MODE_INPUT);
-	gpio_set_pull_mode(ENCODER_B_PIN,GPIO_FLOATING);
+	// gpio_set_direction(ENCODER_A_PIN,GPIO_MODE_INPUT);
+	// gpio_set_pull_mode(ENCODER_A_PIN,GPIO_PULLUP_ONLY);
+	// gpio_set_direction(ENCODER_B_PIN,GPIO_MODE_INPUT);
+	// gpio_set_pull_mode(ENCODER_B_PIN,GPIO_FLOATING);
 
 	pcnt_counter_pause(PCNT_UNIT_0); // Initial PCNT init
 	pcnt_counter_clear(PCNT_UNIT_0);
@@ -160,7 +167,7 @@ void r_encoder_setup(void){
 #ifdef ENCODER_S_PIN
 	gpio_pad_select_gpio(ENCODER_S_PIN);
 	gpio_set_direction(ENCODER_S_PIN, GPIO_MODE_INPUT);
-	gpio_set_pull_mode(ENCODER_S_PIN,GPIO_PULLDOWN_ONLY);
+	gpio_set_pull_mode(ENCODER_S_PIN,GPIO_PULLUP_ONLY);
 #endif
 
 }
@@ -176,7 +183,7 @@ uint8_t r_encoder_state(void){
 		EncoderState = 2;
 	}
 #ifdef ENCODER_S_PIN
-	if(gpio_get_level(ENCODER_S_PIN)==1){
+	if(gpio_get_level(ENCODER_S_PIN)==0){
 		EncoderState+= 4;
 	}
 #endif
