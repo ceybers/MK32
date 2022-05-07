@@ -191,13 +191,13 @@ uint8_t *check_key_state(uint16_t **keymap) {
 
 				led_status = check_led_status(keycode);
 				if (matrix_state[row][col - MATRIX_COLS * pad] == 1) {
-
+#ifdef POTENTIOMETER
 					if(keycode==POTENTIOMETER_KEY) {
 						ESP_LOGI(KEY_PRESS_TAG,	"POTENTIOMETER_BASE_VAL");
 						potentiometer_reset();
 						continue;
 					}
-					
+#endif
 					//checking for function
 					if (keycode >= PLUGIN_BASE_VAL){
 						plugin_launcher(keycode);
